@@ -67,4 +67,31 @@ module.exports.getProfile = async (req, res) => {
     res.status(500).json({ message: 'Internal server error', success: false });
   }
 }
-1:18:52
+module.exports.editProfile = async (req, res) => {
+  try {
+    const userId = req.id;
+    const { bio, gender } = req.body;
+    const profilePicture = req.file;
+    let cloudResponse;
+    if (profilePicture) {
+      const fileUri = getDataUri(profilePicture);
+      cloudResponse = await cloudinary.uploader.upload(fileUri);
+    }
+    const user = await User.findById(userId);
+    if (bio) {
+      user.bio = bio;
+    }
+    if (gender) {
+      user.gender = gender;
+    }
+    if (profilePicture) {
+      user.profilePicture = cloudResponse.url;
+    }
+    await user.save();
+    return res.status(200).json({ success: true, message: 'Profile updated successfully', user });
+  } catch (error) {
+    console.error('Edit profile error:', error);
+    res.status(500).json({ message: 'Internal server error', success: false });
+  }
+}
+// 1:40:00
