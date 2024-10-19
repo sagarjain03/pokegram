@@ -24,7 +24,7 @@ const userSchema = new mongoose.Schema({
     default:""
   },
   gender:{
-    type:string,
+    type:String,
     enum:["Male", "Female"],
    
   },
@@ -54,5 +54,5 @@ const userSchema = new mongoose.Schema({
   ]
 },{timestamps:true});
 
-module.exports = mongoose.model("User",userSchema);
+module.exports = mongoose.model("User",userSchema); 
   
